@@ -44,26 +44,19 @@ class User(db.Model, UserMixin):
 #model for the baby table
 class Baby(db.Model):
     id = db.Column(db.String, primary_key = True)
-    first_name = db.Column(db.String(100), nullable = False)
+    name = db.Column(db.String(100), nullable = False)
     birth_date = db.Column(db.DateTime, nullable = False)
-    gender = db.Column(db.String(50))
-    token = db.Column(db.String, unique=True)
     parent_id = db.Column(db.String,db.ForeignKey('user.token'), nullable=False)
     sleep = db.relationship('Sleep', backref= "baby", lazy=True)
 
-    def __init__(self,first_name,birth_date,gender,parent_id):
+    def __init__(self,name,birth_date,,parent_id):
         self.id = set_id()
-        self.first_name = first_name
+        self.name = name
         self.birth_date = birth_date
-        self.gender = gender
-        self.token = set_toke(24)
         self.parent_id = parent_id
 
     def set_id(self):
         return str(uuid.uuid4)
-
-    def set_token(self, length):
-        return secrets.token_hex(length)
 
     def __repr__(self):
         return f"{self.first_name} has been added to the Baby Table"
@@ -75,7 +68,7 @@ class Sleep(db.Model):
     start_time =  db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime)
     sleep_duration = db.Column(db.DateTime)
-    child_id = db.Column(db.String, db.ForeignKey("baby.token"), nullable=False)
+    child_id = db.Column(db.String, db.ForeignKey("baby.id"), nullable=False)
 
     def __init__(self,sleep_type,start_time,end_time,sleep_duration,baby_id):
         self.id = set_id()
