@@ -1,8 +1,17 @@
 {% extends 'shared/base.html' %}
+
 {% block content%}
 
 <div>
-    <h1>page after login, shows baby, and options</h1>
+    <h1> Hello can see you have a baby who's name is: and who was born on </h1>
+    <ul>
+    {% for baby in babies %}
+        <li>
+            <p>Name: {{ baby.name }}</p>
+            <p>Birthday: {{ baby.birth_date }}</p>
+        </li>
+    {% endfor %}
+    </ul>
 </div>
 
 {% endblock content %}

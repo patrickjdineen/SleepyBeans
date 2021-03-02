@@ -60,7 +60,7 @@ class Baby(db.Model):
         return str(uuid.uuid4())
 
     def __repr__(self):
-        return f"{self.first_name} has been added to the Baby Table"
+        return f"{self.name} has been added to the Baby Table"
 
 #model for the sleep table
 class Sleep(db.Model):
