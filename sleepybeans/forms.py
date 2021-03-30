@@ -21,3 +21,7 @@ class BabyForm(FlaskForm):
     name = StringField('Name')
     birthdate = DateField('Date')
     submit_button = SubmitField()
+
+class SleepForm(FlaskForm):
+    sleep_type=StringField('sleep_type')
+    submit_button=SubmitField()

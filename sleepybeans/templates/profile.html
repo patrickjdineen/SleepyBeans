@@ -3,15 +3,29 @@
 {% block content%}
 
 <div>
-    <h1> Hello can see you have a baby who's name is: and who was born on </h1>
-    <ul>
-    {% for baby in babies %}
-        <li>
-            <p>Name: {{ baby.name }}</p>
-            <p>Birthday: {{ baby.birth_date }}</p>
-        </li>
-    {% endfor %}
-    </ul>
+    {% if babies %}
+    
+        {% for baby in babies %}
+        <h1> Hello can see you have a baby who's name is: and who was born on </h1>
+        <ul>
+        
+            <li>
+                <p>Name: {{ baby.name }}</p>
+                <p>Birthday: {{ baby.birth_date }}</p>
+            </li>
+            <button>Start Sleep</button>
+            
+        </ul>
+        {% endfor %}
+    {% else %}
+        <div>
+            You dont have any babies.
+            <button ><a href='{{ url_for("baby") }}'>add</a></button>
+        </div>
+        
+   
+    
+    {% endif %}
 </div>
 
 {% endblock content %}

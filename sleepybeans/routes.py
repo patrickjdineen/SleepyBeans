@@ -78,7 +78,6 @@ def baby():
     if request.method == 'POST':
         names = form.name.data
         date=form.birthdate.data
-        print(date)
         new_baby = Baby(name=names, birth_date=date, parent_id=current_user.token)
         db.session.add(new_baby)
         db.session.commit()

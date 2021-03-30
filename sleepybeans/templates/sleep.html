@@ -1,12 +1,11 @@
 {% extends 'shared/base.html' %}
+
 {% block content %}
 <h1>
     This is the sleep page
 </h1>
 <H3>Start some new sleep</H3>
-<form action="/sleep" method="post">
-    <input type="datetime" name="sleep_start">What Time did this sleep start?</input>
-    <input type="datetime" name="sleep-end">What Time did this sleep end?</input>
+    {% include '/shared/sleep-form.html' %}
     
 </form>
     

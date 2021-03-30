@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, date
 import secrets
 import uuid
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash,check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from sleepybeans.forms import UserLoginForm
 
 @login_manager.user_loader

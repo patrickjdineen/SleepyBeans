@@ -12,7 +12,28 @@
 </head>
 <body>
 
-    <h1>SleepyBeans - A Baby Sleep Tracking Web Application</h1>
+    <nav class='navbar'>
+        <ul>
+            {% if current_user.is_authenticated %}
+            <li>
+                <a href='{{ url_for("profile") }}'>Profile</a>
+            </li>
+            <li>
+                <a href='{{ url_for("logout") }}'>Logout</a>
+            </li>
+            {% else %}   
+            <li>
+                <a href='{{ url_for("login") }}'>Login</a>
+            </li>
+            <li>
+                <a href='{{ url_for("signup") }}'>Signup</a>
+            </li>
+            {% endif %}
+        </ul>
+
+    </nav>
+
+
 
     {% block content %}
     {% endblock content %}
