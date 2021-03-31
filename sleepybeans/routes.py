@@ -6,10 +6,11 @@ from datetime import datetime
 from sleepybeans.models import User, Baby, Sleep, check_password_hash
 from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm, SleepForm
 
+
 #TBD
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(user_id)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 #Home
 @app.route('/')
@@ -66,7 +67,7 @@ def profile():
     babies = Baby.query.filter(Baby.parent_id== current_user.token).all()
     user = User.query.filter(User.token==current_user.token).first()
     return render_template('/profile.html',
-    babies = babies)
+    babies = babies, user=user)
     # first_name = user.first_name,
     # baby_name=baby.name,
     # baby_birthdate=baby.birth_date)
@@ -83,20 +84,30 @@ def baby():
         db.session.add(new_baby)
         db.session.commit()
         return redirect(url_for('profile'))
-    if request.method == 'DELETE':
-        
     else:
         print("fail")
     return render_template('/baby.html',form=form)
 
+@app.route('/baby/<baby_id>', methods= ['GET','DELETE'])
+# @login_required
+def del_baby(baby_id):
+    baby=Baby.query.filter_by(id=baby_id).first()
+    if not baby:
+        print('failed')
+    db.session.delete(baby)
+    db.session.commit()
+    return redirect(url_for('profile'))
+
+
 #Sleep Tracking page
-@app.route('/sleep', methods= ['GET','POST'])
-def sleep(baby):
+@app.route('/sleep/<baby_id>', methods= ['GET','POST'])
+def sleep(baby_id):
     form=SleepForm()
     if request.method == 'POST':
         sleep_type=form.sleep_type.data
         start_time=datetime.utcnow()
-        sleep=Sleep(sleep_type=sleep_type,start_time=start_time, baby=baby)
+        sleep=Sleep(sleep_type=sleep_type,start_time=start_time, baby_id=baby.id)
         db.session.add(sleep)
         db.session.commit()
     return render_template('/sleep.html', form=form)
+
