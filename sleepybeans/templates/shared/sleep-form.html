@@ -3,24 +3,10 @@
     <div class="form-group">
 
         <fieldset class="first-name-field">
-            {{ form.first.label }}
-            {{ form.first(class="form-control", placeholder="First or Given Name") }}
+            {{ form.sleep_type.label }}
+            {{ form.sleep_type(class="form-control", placeholder="Nap") }}
         </fieldset>
 
-        <fieldset class="last-name-field">
-            {{ form.last.label }}
-            {{ form.last(class="form-control", placeholder="Last or Family Name") }}
-        </fieldset>
-
-        <fieldset class="email-field">
-            {{ form.email.label }}
-            {{ form.email(class="form-control", placeholder="Ex. email@gmail.com ") }}
-        </fieldset>
-
-        <fieldset class="password-field">
-            {{ form.password.label }}
-            {{ form.password(class="form-control", placeholder="Password...") }}
-        </fieldset>
         {{ form.submit_button }}
     </div>
 </form>

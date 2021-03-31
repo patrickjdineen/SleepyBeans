@@ -1,9 +1,10 @@
 from sleepybeans import app, db, login_manager
 from flask import render_template, request, redirect, url_for, session
 from flask_login import login_user, logout_user, current_user, login_required
+from datetime import datetime
 
 from sleepybeans.models import User, Baby, Sleep, check_password_hash
-from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm
+from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm, SleepForm
 
 #TBD
 # @login_manager.user_loader
@@ -71,7 +72,7 @@ def profile():
     # baby_birthdate=baby.birth_date)
 
 #Page to create baby and commit them to DB
-@app.route('/baby', methods= ['GET','POST'])
+@app.route('/baby', methods= ['GET','POST', 'PUT','DELETE'])
 @login_required
 def baby():
     form = BabyForm()
@@ -82,13 +83,20 @@ def baby():
         db.session.add(new_baby)
         db.session.commit()
         return redirect(url_for('profile'))
+    if request.method == 'DELETE':
+        
     else:
         print("fail")
     return render_template('/baby.html',form=form)
 
 #Sleep Tracking page
 @app.route('/sleep', methods= ['GET','POST'])
-def sleep():
-    if request.form:
-        print(request.form)
-    return render_template('/sleep.html')
+def sleep(baby):
+    form=SleepForm()
+    if request.method == 'POST':
+        sleep_type=form.sleep_type.data
+        start_time=datetime.utcnow()
+        sleep=Sleep(sleep_type=sleep_type,start_time=start_time, baby=baby)
+        db.session.add(sleep)
+        db.session.commit()
+    return render_template('/sleep.html', form=form)
