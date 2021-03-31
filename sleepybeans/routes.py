@@ -73,14 +73,14 @@ def profile():
     # baby_birthdate=baby.birth_date)
 
 #Page to create baby and commit them to DB
-@app.route('/baby', methods= ['GET','POST', 'PUT','DELETE'])
+@app.route('/baby', methods= ['GET','POST'])
 @login_required
-def baby():
+def new_baby():
     form = BabyForm()
     if request.method == 'POST':
-        names = form.name.data
+        name = form.name.data
         date=form.birthdate.data
-        new_baby = Baby(name=names, birth_date=date, parent_id=current_user.token)
+        new_baby = Baby(name=name, birth_date=date, parent_id=current_user.token)
         db.session.add(new_baby)
         db.session.commit()
         return redirect(url_for('profile'))
@@ -88,8 +88,9 @@ def baby():
         print("fail")
     return render_template('/baby.html',form=form)
 
+#route to remove baby from list of babies
 @app.route('/baby/<baby_id>', methods= ['GET','DELETE'])
-# @login_required
+@login_required
 def del_baby(baby_id):
     baby=Baby.query.filter_by(id=baby_id).first()
     if not baby:
@@ -97,17 +98,87 @@ def del_baby(baby_id):
     db.session.delete(baby)
     db.session.commit()
     return redirect(url_for('profile'))
-
-
-#Sleep Tracking page
-@app.route('/sleep/<baby_id>', methods= ['GET','POST'])
-def sleep(baby_id):
-    form=SleepForm()
+#route to update a baby
+@app.route('/baby/<baby_id>/update', methods=['GET','POST','PUT'])
+@login_required
+def update_baby(baby_id):
+    baby=Baby.query.filter_by(id=baby_id).first()
+    form = BabyForm()
     if request.method == 'POST':
+        baby.name = form.name.data
+        baby.birth_date=form.birthdate.data
+        db.session.commit()
+        return redirect(url_for('profile'))
+    else:
+        return render_template('/baby.html',form=form)
+
+#test sleep page
+@app.route('/sleep/<baby_id>', methods=['GET','POST'])
+@login_required
+def get_sleeps(baby_id):
+    form=SleepForm()
+    if request.method=='GET':
+        print('in get')
+        form=SleepForm()
+        baby=baby_id
+        sleeps = Sleep.query.filter(Sleep.child_id==baby).all()
+        print(sleeps)
+        return render_template('/sleep.html', sleeps=sleeps, form=form)
+    if request.method=='POST':
+        print('in post')
+        form=SleepForm()
+        baby=baby_id
+        print(baby)
         sleep_type=form.sleep_type.data
         start_time=datetime.utcnow()
-        sleep=Sleep(sleep_type=sleep_type,start_time=start_time, baby_id=baby.id)
+        sleep = Sleep(sleep_type=sleep_type,start_time=start_time, child_id=baby, end_time=None, sleep_duration=None)
+        print(sleep)
         db.session.add(sleep)
         db.session.commit()
+        return redirect(url_for('sleep'))
+    else:
+        return ""
+
+@app.route('/sleep/<sleep_id>', methods=['DELETE'])
+@login_required
+def mod_sleep(sleep_id):
+    if request.method=='DELETE':
+        sleep = Sleep.query.filter_by(id=sleep_id).first()
+        print(sleep)
+        db.session.delete(sleep)
+        db.session.commit
+        return redirect(url_for('sleep'))
+    else:
+        print('error')
+
+@app.route('/sleep/<baby_id>/new', methods=['GET','POST'])
+@login_required
+def new_sleep(baby_id):
+    form=SleepForm()
+    baby=baby_id
+    sleep_type=form.sleep_type.data
+    start_time=datetime.utcnow()
+    sleep = Sleep(sleep_type=sleep_type,child_id=baby,start_time=start_time)
+    db.session.add(sleep)
+    db.session.commit()
     return render_template('/sleep.html', form=form)
 
+# #Sleep Tracking page
+# @app.route('/sleep/<baby_id>', methods= ['GET','POST'])
+# def sleep(baby_id):
+#     form=SleepForm()
+#     if request.method=='GET':
+#         return render_template('/sleep.html', form=form)
+#     if request.method == 'POST':
+#         sleep_type=form.sleep_type.data
+#         start_time=datetime.utcnow()
+#         sleep=Sleep(sleep_type=sleep_type,start_time=start_time,baby_id=baby_id, end_time=None, sleep_duration=None)
+#         db.session.add(sleep)
+#         db.session.commit()
+#     return render_template('/sleep.html', form=form)
+
+# @app.route('/baby/<baby_id>/sleep',methods=['GET','POST'])
+# @login_required
+# def new_sleep(baby_id):
+#     new_sleep=""
+#     return ""

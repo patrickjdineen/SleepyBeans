@@ -8,7 +8,7 @@
     {% if babies %}
     <br />
     If you have a new baby, you can add it here: <br />
-    <button ><a href='{{ url_for("baby") }}'>add</a></button>
+    <button ><a href='{{ url_for("new_baby") }}'>add</a></button>
     
     
         {% for baby in babies %}
@@ -18,21 +18,28 @@
                 <p>Name: {{ baby.name }}</p>
             </li>
             <li>
-                Birthday: {{ baby.birth_date }}
+                Birthday: {{ baby.birth_date.date() }}
             </li>
 
-            <form action='sleep/{{baby.id}}' method='post'>
+            <!-- <form action='sleep/{{baby.id}}' method='get'>
             <button type=submit>start sleep</button>
+            </form> -->
+            <form action="sleep/{{baby.id}}" method='get'>
+                <button type="submit">show sleeps</button>
             </form>
+            <!-- TODO - add confirmation on remove-->
             <form action='/baby/{{ baby.id }}' method='delete'>
-                <button type=submit >delete?</button>
+                <button type=submit >remove baby</button>
+            </form>
+            <form action='/baby/{{ baby.id }}/update' method='put'>
+                <button type=submit method='put'>update?</button>
             </form>
         </ul>
         {% endfor %}
     {% else %}
         <div>
             You dont have any babies.
-            <button ><a href='{{ url_for("baby") }}'>add</a></button>
+            <button ><a href='{{ url_for("new_baby") }}'>add</a></button>
         </div>
     
     

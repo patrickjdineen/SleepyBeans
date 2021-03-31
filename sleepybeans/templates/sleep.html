@@ -1,12 +1,30 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-<h1>
-    This is the sleep page
-</h1>
+
+{% if sleeps %}
+    {% for sleep in sleeps %}
+    <div>
+        <ul>
+            <li>
+                <p>Sleep Type: {{ sleep.sleep_type }}</p>
+                <p>{{ sleep.start_time }}</p>
+                <form action='/sleep/{{ sleep.id }}' method='delete'>
+                    <button type="submit">Cancel</button>
+                </form>
+            
+            </li>
+        </ul>
+        
+    </div>
+    
+
+    {% endfor %}
+{% else %}
+There are no currently sleeping bab
 <H3>Start some new sleep</H3>
-    {% include '/shared/sleep-form.html' %}
+    {% include '/forms/sleep-form.html' %}
     
 </form>
-    
+{% endif %}
 {% endblock content%}

@@ -71,7 +71,7 @@ class Sleep(db.Model):
     sleep_duration = db.Column(db.DateTime)
     child_id = db.Column(db.String, db.ForeignKey("baby.id"), nullable=False)
 
-    def __init__(self,sleep_type,start_time,end_time,sleep_duration,baby_id):
+    def __init__(self,sleep_type,start_time,end_time,sleep_duration,child_id):
         self.id = self.set_id()
         self.sleep_type = sleep_type
         self.start_time = start_time
