@@ -1,31 +1,68 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-
+<div class='container'>
 {% if sleeps %}
-    {% for sleep in sleeps %}
-    <div>
-        <ul>
-            <li>
-                <p>Sleep Type: {{ sleep.sleep_type }}</p>
-                <p>{{ sleep.start_time }}</p>
-                <p>{{ sleep.id }}</p>
-                <form action='/sleep/{{ sleep.id }}/del' method='delete'>
-                    <button type="submit">Cancel</button>
-                </form>
-            
-            </li>
-        </ul>
-        
-    </div>
-    
 
+<h1>Here are the sleep sessions for {{ baby.name.title() }}</h1>
+    {% include '/forms/sleep-form.html' %}
+
+    {% for sleep in sleeps %}
+    <div class='sleep-row'>
+        <div class='sleep-left'>
+            <h4 class='sleep-start'>Sleep started at: {{ sleep.start_time}}</h4>
+            {% if sleep.sleep_duration %}
+                <h4 class='sleep-duration'> Sleep length: {{ sleep.sleep_duration }}</h4>
+            {% endif %}
+        </div>
+        <div class='sleep-right'>
+            {% if not sleep.end_time %}
+            <form action='/baby/{{ baby.id }}/sleep/{{ sleep.id }}/end' method='post'>
+                <button class='btn btn-primary' type="submit">End Sleep</button>
+            </form>
+            {% endif %}
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Delete Sleep
+            </button>
+        </div>
+
+    </div>
+
+
+    
+    <!--Modal information for delete sleep-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Sleep?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this sleep session?
+                <br />
+                <br />
+                This cannot be undone!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action='/baby/{{ baby.id }}/sleep/{{ sleep.id }}/del' method='delete'>
+                    <button class='btn btn-danger' type="submit">Delete</button>
+            </form>
+            </div>
+            </div>
+        </div>
+        </div>
     {% endfor %}
+
 {% else %}
-There are no currently sleeping bab
+<h1>{{baby.name.title()}} has not yet logged a sleep. Start one now!</h1>
+
 <H3>Start some new sleep</H3>
     {% include '/forms/sleep-form.html' %}
     
-</form>
+
 {% endif %}
+
+</div>
 {% endblock content%}

@@ -9,35 +9,31 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 <link rel="stylesheet" href="../../static/styles.css">
 <title>SleepyBeans</title>
+<script src='../../static/index.js'></script>
 </head>
 <body>
 
-    <nav class='navbar'>
-        <ul>
+    <nav class='navbar navbar-light bg-light'>
+        <div class='container-fluid'>
+            <a class='navbar-brand' href='{{ url_for("home") }}'>
+                <img src='../../static/images/logo.png' width='60' height='30' class='d-inline-block align-top'>
+            </a>
+            <div class='nav'>
             {% if current_user.is_authenticated %}
-            <li>
-                <a href='{{ url_for("profile") }}'>Profile</a>
-            </li>
-            <li>
-                <a href='{{ url_for("logout") }}'>Logout</a>
-            </li>
+                <a class='nav-link' href='{{ url_for("profile") }}'>Nursery</a>
+                <a class='nav-link' href='{{ url_for("logout") }}'>Logout</a>
             {% else %}   
-            <li>
-                <a href='{{ url_for("login") }}'>Login</a>
-            </li>
-            <li>
-                <a href='{{ url_for("signup") }}'>Signup</a>
-            </li>
+                <a class='nav-link' href='{{ url_for("login") }}'>Login</a>
+                <a class='nav-link' href='{{ url_for("signup") }}'>Signup</a>
             {% endif %}
-        </ul>
-
+            </div>
+        </div>
+        
     </nav>
-
 
 
     {% block content %}
     {% endblock content %}
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>

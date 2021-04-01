@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     email_address = db.Column(db.String(200))
     password = db.Column(db.String, nullable = True)
     token = db.Column(db.String, unique=True)
-    child = db.relationship('Baby', backref = 'parent', lazy=True)
+    child = db.relationship('Baby', backref = 'parent', lazy=True,cascade = 'all, delete')
 
     def __init__(self,first_name = '"',last_name = "",email_address = "",password = "" ,token = ""):
         self.id = self.set_id()
@@ -48,7 +48,7 @@ class Baby(db.Model):
     name = db.Column(db.String(100), nullable = False)
     birth_date = db.Column(db.DateTime, nullable = False)
     parent_id = db.Column(db.String,db.ForeignKey('user.token'), nullable=False)
-    sleep = db.relationship('Sleep', backref= "baby", lazy=True)
+    sleep = db.relationship('Sleep', backref= "baby", lazy=True, cascade = 'all, delete')
 
     def __init__(self,name,birth_date,parent_id):
         self.id = self.set_id()
@@ -68,7 +68,7 @@ class Sleep(db.Model):
     sleep_type = db.Column(db.String(150))
     start_time =  db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime)
-    sleep_duration = db.Column(db.DateTime)
+    sleep_duration = db.Column(db.Time)
     child_id = db.Column(db.String, db.ForeignKey("baby.id"), nullable=False)
 
     def __init__(self,sleep_type,start_time,end_time,sleep_duration,child_id):

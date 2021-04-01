@@ -2,40 +2,65 @@
 
 {% block content%}
 
-<div>
-    Welcome back to the nursery, {{ user.first_name.title() }}
+<div class='container'>
+    <div class='row'>
+        <div class='col'>
+            <h1>Welcome back to your nursery, {{ user.first_name.title() }}</h1>
+            
+        </div>
+    </div>
 
     {% if babies %}
     <br />
-    If you have a new baby, you can add it here: <br />
-    <button ><a href='{{ url_for("new_baby") }}'>add</a></button>
+    <h3>If you have a new baby, you can add it here: <br /></h3>
+    <form action='{{ url_for("new_baby") }}'>
+        <button class='btn btn-primary'>Add Baby</button> 
+    </form>
     
-    
-        {% for baby in babies %}
-
-        <ul>
-            <li>
-                <p>Name: {{ baby.name }}</p>
-            </li>
-            <li>
-                Birthday: {{ baby.birth_date.date() }}
-            </li>
-
-            <!-- <form action='sleep/{{baby.id}}' method='get'>
-            <button type=submit>start sleep</button>
-            </form> -->
-            <form action="sleep/{{baby.id}}" method='get'>
-                <button type="submit">show sleeps</button>
-            </form>
-            <!-- TODO - add confirmation on remove-->
-            <form action='/baby/{{ baby.id }}' method='delete'>
-                <button type=submit >remove baby</button>
+    {% for baby in babies %}
+    <h2>Here's the information for your babies</h2>
+    <div class='baby-row'>
+        <div class='baby-left'>
+            <h3 class='baby-name'>{{ baby.name}}</h3>
+            <p class='baby-birthday'>{{ baby.birth_date.date() }}</p>
+        </div>
+        <div class='baby-right'>
+            <form action="baby/{{baby.id}}/sleep" method='get'>
+                <button class='btn btn-primary' type="submit">Show Sleep</button>
             </form>
             <form action='/baby/{{ baby.id }}/update' method='put'>
-                <button type=submit method='put'>update?</button>
+                <button class='btn btn-secondary' type=submit method='put'>Update Information</button>
             </form>
-        </ul>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Remove Baby
+            </button>
+        </div>
+    </div>
+    <!--Modal information for delete button and confirmation-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Remove Baby?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove {{ baby.name}} and all it's associated sleeps? 
+                <br />
+                <br />
+                This cannot be undone!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action='/baby/{{ baby.id }}' method='delete'>
+                <button type=submit class='btn btn-danger' >Remove Baby</button>
+            </form>
+            </div>
+            </div>
+        </div>
+        </div>
         {% endfor %}
+
     {% else %}
         <div>
             You dont have any babies.

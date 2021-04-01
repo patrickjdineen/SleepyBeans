@@ -112,67 +112,50 @@ def update_baby(baby_id):
     else:
         return render_template('/baby.html',form=form)
 
-#test sleep page
-@app.route('/sleep/<baby_id>', methods=['GET','POST'])
+@app.route('/baby/<baby_id>/sleep', methods=['GET','POST'])
 @login_required
-def get_sleeps(baby_id):
+def main_sleep(baby_id):
     form=SleepForm()
+    sleeps = Sleep.query.filter_by(child_id=baby_id).all()
+    baby= Baby.query.filter_by(id=baby_id).first()
     if request.method=='GET':
-        print('in get')
-        form=SleepForm()
-        baby=baby_id
-        sleeps = Sleep.query.filter(Sleep.child_id==baby).all()
-        print(sleeps)
-        return render_template('/sleep.html', sleeps=sleeps, form=form)
+        return render_template('/sleep.html', sleeps=sleeps, baby=baby, form=form)
     if request.method=='POST':
-        print('in post')
-        form=SleepForm()
-        baby=baby_id
-        print(baby)
         sleep_type=form.sleep_type.data
         start_time=datetime.utcnow()
-        sleep = Sleep(sleep_type=sleep_type,start_time=start_time, child_id=baby, end_time=None, sleep_duration=None)
-        print(sleep)
+        sleep = Sleep(sleep_type=sleep_type,child_id=baby.id,start_time=start_time, end_time=None, sleep_duration=None)
         db.session.add(sleep)
+        print(sleep)
         db.session.commit()
-        return redirect(url_for('sleep'))
-    else:
-        return ""
+        return redirect(url_for('main_sleep', form=form, sleeps=sleeps, baby_id=baby.id))
 
-# @app.route('/sleep/<sleep_id>/del', methods=['GET','DELETE'])
-# @login_required
-# def del_sleep(sleep_id):
-#     # if request.method=='DELETE':
-#     print('in del proper')
-#     id=sleep_id
-#     sleep = Sleep.query.filter_by(id=sleep_id).first()
-#     print(sleep)
-#     db.session.delete(sleep)
-#     db.session.commit
-#     return redirect(url_for('del_sleep'))
-#     # else:
-#     #     print('error')
-#     #     return (url_for('sleep'))
-
-@app.route('/sleep/<sleep_id>/del', methods= ['GET','DELETE'])
+@app.route('/baby/<baby_id>/sleep/<sleep_id>/del', methods=['GET','POST'])
 @login_required
-def del_sleep(sleep_id):
-    sleep=Sleep.query.filter_by(id=sleep_id).first()
-    if not sleep:
-        print('failed')
-    print('...deleting')
-    print(sleep)
+def del_sleep(baby_id, sleep_id):
+    print('in del')
+    sleep= Sleep.query.filter_by(id=sleep_id).first()
+    baby = Baby.query.filter_by(id=baby_id).first()
     db.session.delete(sleep)
-
     db.session.commit()
-    print('deleted')
-    return redirect(url_for('profile'))
+    return redirect(url_for('main_sleep', baby_id=baby.id))
 
-@app.route('/sleep/<baby_id>/new', methods=['GET','POST'])
+@app.route('/baby/<baby_id>/sleep/<sleep_id>/end', methods=['GET','POST'])
+@login_required
+def end_sleep(baby_id, sleep_id):
+    print('in end')
+    sleep= Sleep.query.filter_by(id=sleep_id).first()
+    baby = Baby.query.filter_by(id=baby_id).first()
+    sleep.end_time=datetime.utcnow()
+    sleep.sleep_duration=(sleep.end_time-sleep.start_time)
+    db.session.commit()
+    return redirect(url_for('main_sleep', baby_id=baby.id))
+
+@app.route('/baby/<baby_id>/sleep', methods=['GET','POST'])
 @login_required
 def new_sleep(baby_id):
     form=SleepForm()
     baby=baby_id
+    print('sleep create')
     sleep_type=form.sleep_type.data
     start_time=datetime.utcnow()
     sleep = Sleep(sleep_type=sleep_type,child_id=baby,start_time=start_time)
@@ -180,22 +163,3 @@ def new_sleep(baby_id):
     db.session.commit()
     return render_template('/sleep.html', form=form)
 
-# #Sleep Tracking page
-# @app.route('/sleep/<baby_id>', methods= ['GET','POST'])
-# def sleep(baby_id):
-#     form=SleepForm()
-#     if request.method=='GET':
-#         return render_template('/sleep.html', form=form)
-#     if request.method == 'POST':
-#         sleep_type=form.sleep_type.data
-#         start_time=datetime.utcnow()
-#         sleep=Sleep(sleep_type=sleep_type,start_time=start_time,baby_id=baby_id, end_time=None, sleep_duration=None)
-#         db.session.add(sleep)
-#         db.session.commit()
-#     return render_template('/sleep.html', form=form)
-
-# @app.route('/baby/<baby_id>/sleep',methods=['GET','POST'])
-# @login_required
-# def new_sleep(baby_id):
-#     new_sleep=""
-#     return ""

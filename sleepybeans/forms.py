@@ -7,9 +7,8 @@ from wtforms.fields.html5 import DateField
 class UserSignUpForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email() ])
     password = PasswordField('Password', validators= [DataRequired() ])
-    first = StringField('First Name')
-    last = StringField('Last Name')
-    name = StringField('Name')
+    first = StringField('First Name' , validators= [DataRequired() ])
+    last = StringField('Last Name' , validators= [DataRequired() ])
     submit_button = SubmitField()
 
 class UserLoginForm(FlaskForm):
@@ -18,10 +17,10 @@ class UserLoginForm(FlaskForm):
     submit_button = SubmitField()
 
 class BabyForm(FlaskForm):
-    name = StringField('Name')
-    birthdate = DateField('Date')
+    name = StringField('Name' , validators= [DataRequired() ])
+    birthdate = DateField('Date', validators= [DataRequired() ])
     submit_button = SubmitField()
 
 class SleepForm(FlaskForm):
-    sleep_type=StringField('sleep_type')
+    sleep_type=StringField('sleep_type', validators= [DataRequired() ])
     submit_button=SubmitField()
