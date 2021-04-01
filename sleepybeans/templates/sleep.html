@@ -9,7 +9,8 @@
             <li>
                 <p>Sleep Type: {{ sleep.sleep_type }}</p>
                 <p>{{ sleep.start_time }}</p>
-                <form action='/sleep/{{ sleep.id }}' method='delete'>
+                <p>{{ sleep.id }}</p>
+                <form action='/sleep/{{ sleep.id }}/del' method='delete'>
                     <button type="submit">Cancel</button>
                 </form>
             

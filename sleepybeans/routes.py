@@ -139,17 +139,34 @@ def get_sleeps(baby_id):
     else:
         return ""
 
-@app.route('/sleep/<sleep_id>', methods=['DELETE'])
+# @app.route('/sleep/<sleep_id>/del', methods=['GET','DELETE'])
+# @login_required
+# def del_sleep(sleep_id):
+#     # if request.method=='DELETE':
+#     print('in del proper')
+#     id=sleep_id
+#     sleep = Sleep.query.filter_by(id=sleep_id).first()
+#     print(sleep)
+#     db.session.delete(sleep)
+#     db.session.commit
+#     return redirect(url_for('del_sleep'))
+#     # else:
+#     #     print('error')
+#     #     return (url_for('sleep'))
+
+@app.route('/sleep/<sleep_id>/del', methods= ['GET','DELETE'])
 @login_required
-def mod_sleep(sleep_id):
-    if request.method=='DELETE':
-        sleep = Sleep.query.filter_by(id=sleep_id).first()
-        print(sleep)
-        db.session.delete(sleep)
-        db.session.commit
-        return redirect(url_for('sleep'))
-    else:
-        print('error')
+def del_sleep(sleep_id):
+    sleep=Sleep.query.filter_by(id=sleep_id).first()
+    if not sleep:
+        print('failed')
+    print('...deleting')
+    print(sleep)
+    db.session.delete(sleep)
+
+    db.session.commit()
+    print('deleted')
+    return redirect(url_for('profile'))
 
 @app.route('/sleep/<baby_id>/new', methods=['GET','POST'])
 @login_required
