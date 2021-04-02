@@ -10,9 +10,9 @@
     {% for sleep in sleeps %}
     <div class='sleep-row'>
         <div class='sleep-left'>
-            <h4 class='sleep-start'>Sleep started at: {{ sleep.start_time}}</h4>
+            <h4 class='sleep-start'>Sleep started at: {{ sleep.start_time.replace(microsecond=0)}}</h4>
             {% if sleep.sleep_duration %}
-                <h4 class='sleep-duration'> Sleep length: {{ sleep.sleep_duration }}</h4>
+                <h4 class='sleep-duration'> Sleep length: {{ sleep.sleep_duration.replace(microsecond=0) }}</h4>
             {% endif %}
         </div>
         <div class='sleep-right'>
@@ -27,8 +27,6 @@
         </div>
 
     </div>
-
-
     
     <!--Modal information for delete sleep-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

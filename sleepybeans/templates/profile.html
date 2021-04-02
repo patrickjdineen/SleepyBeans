@@ -16,13 +16,13 @@
     <form action='{{ url_for("new_baby") }}'>
         <button class='btn btn-primary'>Add Baby</button> 
     </form>
-    
+    <h2>Here's the information for your babies:</h2>
     {% for baby in babies %}
-    <h2>Here's the information for your babies</h2>
+    
     <div class='baby-row'>
         <div class='baby-left'>
             <h3 class='baby-name'>{{ baby.name}}</h3>
-            <p class='baby-birthday'>{{ baby.birth_date.date() }}</p>
+            <p class='baby-birthday'>Birthday: {{ baby.birth_date.date() }}</p>
         </div>
         <div class='baby-right'>
             <form action="baby/{{baby.id}}/sleep" method='get'>
@@ -63,8 +63,8 @@
 
     {% else %}
         <div>
-            You dont have any babies.
-            <button ><a href='{{ url_for("new_baby") }}'>add</a></button>
+            You don't have any babies added to our app.
+            <button class='btn btn-primary'><a href='{{ url_for("new_baby") }}'>add</a></button>
         </div>
     
     

@@ -1,18 +1,19 @@
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
+<div class='container'>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
 
-        <fieldset class="name-field">
-            {{ form.name.label }}
-            {{ form.name(class="form-control", placeholder="Baby Jr.") }}
-        </fieldset>
+            <fieldset class="name-field">
+                {{ form.name.label }}
+                {{ form.name(class="form-control", placeholder="Baby Jr.") }}
+            </fieldset>
 
-        <fieldset class="birth-date-field">
-            {{ form.birthdate.label }}
-            {{ form.birthdate(class="form-control", placeholder="5/17/1986") }}
-        </fieldset>
+            <fieldset class="birth-date-field">
+                {{ form.birthdate.label }}
+                {{ form.birthdate(class="form-control", placeholder="5/17/1986") }}
+            </fieldset>
 
-        {{ form.submit_button }}
-    </div>
-</form>
-
+            {{ form.submit_button (class='btn btn-primary') }}
+        </div>
+    </form>
+</div>

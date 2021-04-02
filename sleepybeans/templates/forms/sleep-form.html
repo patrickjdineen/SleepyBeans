@@ -1,3 +1,4 @@
+
 <form method="POST">
     {{ form.hidden_tag() }}
     <div class="form-group">
@@ -7,7 +8,7 @@
             {{ form.sleep_type(class="form-control", placeholder="Nap") }}
         </fieldset>
 
-        {{ form.submit_button }}
+        {{ form.submit_button(class='btn btn-primary') }}
     </div>
 </form>
 
