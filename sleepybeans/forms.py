@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField
+from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired, Email
 from werkzeug.datastructures import MultiDict
 from wtforms.fields.html5 import DateField
@@ -21,6 +21,12 @@ class BabyForm(FlaskForm):
     birthdate = DateField('Date', validators= [DataRequired() ])
     submit_button = SubmitField()
 
+class UpdateForm(FlaskForm):
+    name = StringField('Name')
+    birthdate = DateField('Date')
+    submit_button = SubmitField()
+
 class SleepForm(FlaskForm):
-    sleep_type=StringField('sleep_type', validators= [DataRequired() ])
+    sleep_choices= ['Nap','Bedtime']
+    sleep_type=SelectField('Sleep Type', choices=sleep_choices, validators= [DataRequired() ])
     submit_button=SubmitField()

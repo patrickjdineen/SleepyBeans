@@ -10,10 +10,13 @@
     {% for sleep in sleeps %}
     <div class='sleep-row'>
         <div class='sleep-left'>
-            <h4 class='sleep-start'>Sleep started at: {{ sleep.start_time.replace(microsecond=0)}}</h4>
+            <h4 class='sleep-start'>{{ sleep.sleep_type }} started at: {{ sleep.start_time.replace(microsecond=0) }}</h4>
             {% if sleep.sleep_duration %}
                 <h4 class='sleep-duration'> Sleep length: {{ sleep.sleep_duration.replace(microsecond=0) }}</h4>
             {% endif %}
+        </div>
+        <div>
+            
         </div>
         <div class='sleep-right'>
             {% if not sleep.end_time %}
@@ -21,9 +24,11 @@
                 <button class='btn btn-primary' type="submit">End Sleep</button>
             </form>
             {% endif %}
+            <form>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Delete Sleep
             </button>
+            </form>
         </div>
 
     </div>

@@ -1,7 +1,7 @@
 from sleepybeans import app, db, login_manager
 from flask import render_template, request, redirect, url_for, session
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import datetime
+from datetime import datetime, date
 
 from sleepybeans.models import User, Baby, Sleep, check_password_hash
 from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm, SleepForm
@@ -15,6 +15,9 @@ def load_user(user_id):
 #Home
 @app.route('/')
 def home():
+    babies = Baby.query.filter(Baby.parent_id== current_user.token).all()
+    print(current_user.token)
+    print(babies)
     return render_template('/home.html')
 
 #Sign Up Page
@@ -62,12 +65,13 @@ def logout():
 @app.route('/profile', methods = ['GET', 'POST'])
 @login_required
 def profile():
-    baby = "test static baby"
     parent_id = current_user.token
     babies = Baby.query.filter(Baby.parent_id== current_user.token).all()
     user = User.query.filter(User.token==current_user.token).first()
+    today=date.today()
+    print(today)
     return render_template('/profile.html',
-    babies = babies, user=user)
+    babies = babies, user=user, today=today)
     # first_name = user.first_name,
     # baby_name=baby.name,
     # baby_birthdate=baby.birth_date)
@@ -89,7 +93,7 @@ def new_baby():
     return render_template('/baby.html',form=form)
 
 #route to remove baby from list of babies
-@app.route('/baby/<baby_id>', methods= ['GET','DELETE'])
+@app.route('/baby/<baby_id>/delete', methods= ['GET','DELETE'])
 @login_required
 def del_baby(baby_id):
     baby=Baby.query.filter_by(id=baby_id).first()
@@ -99,7 +103,7 @@ def del_baby(baby_id):
     db.session.commit()
     return redirect(url_for('profile'))
 #route to update a baby
-@app.route('/baby/<baby_id>/update', methods=['GET','POST','PUT'])
+@app.route('/baby/<baby_id>/update', methods=['GET','POST','PUT','DELETE'])
 @login_required
 def update_baby(baby_id):
     baby=Baby.query.filter_by(id=baby_id).first()
@@ -110,7 +114,7 @@ def update_baby(baby_id):
         db.session.commit()
         return redirect(url_for('profile'))
     else:
-        return render_template('/baby.html',form=form)
+        return render_template('/baby_info.html',form=form, baby=baby)
 
 @app.route('/baby/<baby_id>/sleep', methods=['GET','POST'])
 @login_required
