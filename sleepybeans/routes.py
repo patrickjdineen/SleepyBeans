@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime, date
 
 from sleepybeans.models import User, Baby, Sleep, check_password_hash
-from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm, SleepForm
+from sleepybeans.forms import UserLoginForm, DateField, UserSignUpForm, BabyForm, SleepForm, UpdateForm
 
 
 #TBD
@@ -25,7 +25,7 @@ def home():
 def signup():
     form = UserSignUpForm()
     if request.method == 'POST' and form.validate_on_submit():
-        email = form.email.data
+        email = form.email.data.lower()
         password = form.password.data
         first = form.first.data
         last = form.last.data
@@ -41,7 +41,7 @@ def login():
     form = UserLoginForm()
     print(form.data)
     if request.method =='POST' and form.validate_on_submit():
-        email = form.email.data
+        email = form.email.data.lower()
         password = form.password.data
         logged_user = User.query.filter(User.email_address == email).first()
         print(logged_user)
@@ -107,7 +107,10 @@ def del_baby(baby_id):
 @login_required
 def update_baby(baby_id):
     baby=Baby.query.filter_by(id=baby_id).first()
-    form = BabyForm()
+    form = UpdateForm()
+    if request.method=='GET':
+        form.name.data= baby.name
+        form.birthdate.data=baby.birth_date
     if request.method == 'POST':
         baby.name = form.name.data
         baby.birth_date=form.birthdate.data

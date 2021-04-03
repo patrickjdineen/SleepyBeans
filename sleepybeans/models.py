@@ -46,7 +46,7 @@ class User(db.Model, UserMixin):
 class Baby(db.Model):
     id = db.Column(db.String, primary_key = True)
     name = db.Column(db.String(100), nullable = False)
-    birth_date = db.Column(db.DateTime, nullable = False)
+    birth_date = db.Column(db.Date, nullable = False)
     parent_id = db.Column(db.String,db.ForeignKey('user.token'), nullable=False)
     sleep = db.relationship('Sleep', backref= "baby", lazy=True, cascade = 'all, delete')
 

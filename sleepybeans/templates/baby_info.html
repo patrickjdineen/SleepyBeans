@@ -6,9 +6,6 @@
     <h1>Update {{baby.name}}'s' info in our Tracking Software</h1>
     {% include 'forms/update-form.html' %}
 
-    <form action='/baby/{{ baby.id }}/update' method='put'>
-        <button class='btn btn-secondary' type=submit method='put'>Update Information</button>
-    </form>
     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Remove Baby</button>
 
 

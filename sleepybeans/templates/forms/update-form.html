@@ -1,20 +1,18 @@
 
-<div class='container'>
     <form method="POST">
         {{ form.hidden_tag() }}
         <div class="form-group">
 
             <fieldset class="name-field">
-                {{ form.name.label }}
+                {{ form.name.label }} - Currently set to {{ baby.name.title() }}
                 {{ form.name(class="form-control", placeholder='') }}
             </fieldset>
 
             <fieldset class="birth-date-field">
-                {{ form.birthdate.label }}
+                {{ form.birthdate.label }} - Currently set to {{ baby.birth_date.date()}}
                 {{ form.birthdate(class="form-control", placeholder="5/17/1986") }}
             </fieldset>
 
             {{ form.submit_button (class='btn btn-primary') }}
         </div>
     </form>
-</div>
