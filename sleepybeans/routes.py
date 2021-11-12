@@ -15,7 +15,8 @@ def load_user(user_id):
 #Home
 @app.route('/')
 def home():
-    babies = Baby.query.filter(Baby.parent_id== current_user.token).all()
+    if current_user:
+        babies = Baby.query.filter(Baby.parent_id== current_user.token).all()
     print(current_user.token)
     print(babies)
     return render_template('/home.html')
